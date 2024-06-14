@@ -23,25 +23,6 @@
             <div class="p-2 toolbar d-flex align-items-center">
                 <div class="icon mx-2">{% inline "anchor.svg" %}</div>
                 <div class="flex-grow-1"></div>
-                <button class="toolbar-item"
-                        :class="{active: filterSelected == 'unread'}"
-                        title="Unread"
-                        @click="filterSelected = 'unread'">
-                    <span class="icon">{% inline "circle-full.svg" %}</span>
-                </button>
-                <button class="toolbar-item"
-                        :class="{active: filterSelected == 'starred'}"
-                        title="Starred"
-                        @click="filterSelected = 'starred'">
-                    <span class="icon">{% inline "star-full.svg" %}</span>
-                </button>
-                <button class="toolbar-item"
-                        :class="{active: filterSelected == ''}"
-                        title="All"
-                        @click="filterSelected = ''">
-                    <span class="icon">{% inline "assorted.svg" %}</span>
-                </button>
-                <div class="flex-grow-1"></div>
                 <dropdown class="settings-dropdown" toggle-class="btn btn-link toolbar-item px-2" ref="menuDropdown" drop="right" title="Settings">
                     <template v-slot:button>
                         <span class="icon">{% inline "more-horizontal.svg" %}</span>
@@ -119,21 +100,29 @@
             </div>
             <div id="feed-list-scroll" class="p-2 overflow-auto border-top flex-grow-1">
                 <label class="selectgroup">
-                    <input type="radio" name="feed" value="" v-model="feedSelected">
+                    <input type="radio" name="feed" value="all" v-model="feedSelected" checked>
                     <div class="selectgroup-label d-flex align-items-center w-100">
                         <span class="icon mr-2">{% inline "layers.svg" %}</span>
-                        <span class="flex-fill text-left text-truncate" v-if="filterSelected=='unread'">All Unread</span>
-                        <span class="flex-fill text-left text-truncate" v-if="filterSelected=='starred'">All Starred</span>
-                        <span class="flex-fill text-left text-truncate" v-if="filterSelected==''">All Feeds</span>
+                        <span class="flex-fill text-left text-truncate">All Posts</span>
+                    </div>
+                </label>
+                <label class="selectgroup">
+                    <input type="radio" name="feed" value="unread" v-model="feedSelected">
+                    <div class="selectgroup-label d-flex align-items-center w-100">
+                        <span class="icon mr-2">{% inline "circle.svg" %}</span>
+                        <span class="flex-fill text-left text-truncate">Unread</span>
                         <span class="counter text-right">{{ filteredTotalStats }}</span>
                     </div>
                 </label>
+                <label class="selectgroup">
+                    <input type="radio" name="feed" value="starred" v-model="feedSelected">
+                    <div class="selectgroup-label d-flex align-items-center w-100">
+                        <span class="icon mr-2">{% inline "star.svg" %}</span>
+                        <span class="flex-fill text-left text-truncate">Starred</span>
+                    </div>
+                </label>
                 <div v-for="folder in foldersWithFeeds">
-                    <label class="selectgroup mt-1"
-                           :class="{'d-none': filterSelected
-                                              && !(current.folder.id == folder.id || current.feed.folder_id == folder.id)
-                                              && !filteredFolderStats[folder.id]
-                                              && (!itemSelectedDetails || (feedsById[itemSelectedDetails.feed_id] || {}).folder_id != folder.id)}">
+                    <label class="selectgroup mt-1">
                         <input type="radio" name="feed" :value="'folder:'+folder.id" v-model="feedSelected" v-if="folder.id">
                         <div class="selectgroup-label d-flex align-items-center w-100" v-if="folder.id">
                             <span class="icon mr-2"
@@ -146,12 +135,7 @@
                         </div>
                     </label>
                     <div v-show="!folder.id || folder.is_expanded" class="mt-1" :class="{'pl-3': folder.id}">
-                        <label class="selectgroup"
-                              :class="{'d-none': filterSelected
-                                                 && !(current.feed.id == feed.id)
-                                                 && !filteredFeedStats[feed.id]
-                                                 && (!itemSelectedDetails || itemSelectedDetails.feed_id != feed.id)}"
-                               v-for="feed in folder.feeds">
+                        <label class="selectgroup" v-for="feed in folder.feeds">
                             <input type="radio" name="feed" :value="'feed:'+feed.id" v-model="feedSelected">
                             <div class="selectgroup-label d-flex align-items-center w-100">
                                 <span class="icon mr-2" v-if="!feed.has_icon">{% inline "rss.svg" %}</span>

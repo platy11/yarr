@@ -195,10 +195,10 @@ var vm = new Vue({
   data: function() {
     var s = app.settings
     return {
-      'filterSelected': s.filter,
+      'filterSelected': '',
       'folders': [],
       'feeds': [],
-      'feedSelected': s.feed,
+      'feedSelected': 'all',
       'feedListWidth': s.feed_list_width || 300,
       'feedNewChoice': [],
       'feedNewChoiceSelected': '',
@@ -313,6 +313,21 @@ var vm = new Vue({
     },
     'feedSelected': function(newVal, oldVal) {
       if (oldVal === undefined) return  // do nothing, initial setup
+
+      if (newVal == 'all') {
+        this.feedSelected = ''
+        this.filterSelected = ''
+        return
+      }
+      if (['unread', 'starred'].includes(newVal)) {
+        this.feedSelected = ''
+        this.filterSelected = newVal
+        return
+      }
+      if (newVal != '') {
+        this.filterSelected = ''
+      }
+
       api.settings.update({feed: newVal}).then(this.refreshItems.bind(this, false))
       this.itemSelected = null
       if (this.$refs.itemlist) this.$refs.itemlist.scrollTop = 0
@@ -648,27 +663,19 @@ var vm = new Vue({
       })
     },
     computeStats: function() {
-      var filter = this.filterSelected
-      if (!filter) {
-        this.filteredFeedStats = {}
-        this.filteredFolderStats = {}
-        this.filteredTotalStats = null
-        return
-      }
-
       var statsFeeds = {}, statsFolders = {}, statsTotal = 0
 
       for (var i = 0; i < this.feeds.length; i++) {
         var feed = this.feeds[i]
         if (!this.feedStats[feed.id]) continue
 
-        var n = vm.feedStats[feed.id][filter] || 0
+        let unread = vm.feedStats[feed.id].unread || 0
+        statsFeeds[feed.id] = unread
 
         if (!statsFolders[feed.folder_id]) statsFolders[feed.folder_id] = 0
+        statsFolders[feed.folder_id] += unread
 
-        statsFeeds[feed.id] = n
-        statsFolders[feed.folder_id] += n
-        statsTotal += n
+        statsTotal += unread
       }
 
       this.filteredFeedStats = statsFeeds
