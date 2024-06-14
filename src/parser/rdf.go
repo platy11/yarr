@@ -38,11 +38,12 @@ func ParseRDF(r io.Reader) (*Feed, error) {
 	}
 	for _, srcitem := range srcfeed.Items {
 		dstfeed.Items = append(dstfeed.Items, Item{
-			GUID:    srcitem.Link,
-			URL:     srcitem.Link,
-			Date:    dateParse(srcitem.DublinCoreDate),
-			Title:   srcitem.Title,
-			Content: firstNonEmpty(srcitem.ContentEncoded, srcitem.Description),
+			GUID:        srcitem.Link,
+			URL:         srcitem.Link,
+			Date:        dateParse(srcitem.DublinCoreDate),
+			Title:       srcitem.Title,
+			Description: srcitem.Description,
+			Content:     firstNonEmpty(srcitem.ContentEncoded, srcitem.Description),
 		})
 	}
 	return dstfeed, nil

@@ -130,6 +130,7 @@ func (feed *Feed) cleanup() {
 		feed.Items[i].GUID = strings.TrimSpace(item.GUID)
 		feed.Items[i].URL = strings.TrimSpace(item.URL)
 		feed.Items[i].Title = strings.TrimSpace(htmlutil.ExtractText(item.Title))
+		feed.Items[i].Description = strings.TrimSpace(htmlutil.ExtractText(item.Description))
 		feed.Items[i].Content = strings.TrimSpace(item.Content)
 
 		if item.ImageURL != "" && strings.Contains(item.Content, item.ImageURL) {

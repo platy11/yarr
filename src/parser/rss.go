@@ -92,13 +92,14 @@ func ParseRSS(r io.Reader) (*Feed, error) {
 		}
 
 		dstfeed.Items = append(dstfeed.Items, Item{
-			GUID:     firstNonEmpty(srcitem.GUID.GUID, srcitem.Link),
-			Date:     dateParse(firstNonEmpty(srcitem.DublinCoreDate, srcitem.PubDate)),
-			URL:      firstNonEmpty(srcitem.OrigLink, srcitem.Link, permalink),
-			Title:    srcitem.Title,
-			Content:  firstNonEmpty(srcitem.ContentEncoded, srcitem.Description),
-			AudioURL: podcastURL,
-			ImageURL: srcitem.firstMediaThumbnail(),
+			GUID:        firstNonEmpty(srcitem.GUID.GUID, srcitem.Link),
+			Date:        dateParse(firstNonEmpty(srcitem.DublinCoreDate, srcitem.PubDate)),
+			URL:         firstNonEmpty(srcitem.OrigLink, srcitem.Link, permalink),
+			Title:       srcitem.Title,
+			Description: srcitem.Description,
+			Content:     firstNonEmpty(srcitem.ContentEncoded, srcitem.Description),
+			AudioURL:    podcastURL,
+			ImageURL:    srcitem.firstMediaThumbnail(),
 		})
 	}
 	return dstfeed, nil

@@ -279,6 +279,7 @@
                             <small class="flex-shrink-0"><relative-time v-bind:title="formatDate(item.date)" :val="item.date"/></small>
                         </div>
                         <div>{{ item.title || 'untitled' }}</div>
+                        <div v-if="item.description" class="item-description" :class="{'text-truncate': item.description.length > 150}">{{ item.description }}</div>
                     </div>
                 </label>
                 <button class="btn btn-link btn-block loading my-3" v-if="itemsHasMore"></button>

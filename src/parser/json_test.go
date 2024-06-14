@@ -21,7 +21,8 @@ func TestJSONFeed(t *testing.T) {
 			{
 				"id": "1",
 				"content_html": "<p>Hello, world!</p>",
-				"url": "https://example.org/initial-post"
+				"url": "https://example.org/initial-post",
+				"summary": "This is a description"
 			}
 		]
 	}`))
@@ -30,7 +31,12 @@ func TestJSONFeed(t *testing.T) {
 		SiteURL: "https://example.org/",
 		Items: []Item{
 			{GUID: "2", Content: "This is a second item.", URL: "https://example.org/second-item"},
-			{GUID: "1", Content: "<p>Hello, world!</p>", URL: "https://example.org/initial-post"},
+			{
+				GUID: "1",
+				Content: "<p>Hello, world!</p>",
+				URL: "https://example.org/initial-post",
+				Description: "This is a description",
+			},
 		},
 	}
 

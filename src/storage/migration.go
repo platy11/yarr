@@ -16,6 +16,7 @@ var migrations = []func(*sql.Tx) error{
 	m06_fill_missing_dates,
 	m07_add_feed_size,
 	m08_normalize_datetime,
+	m08a_add_descriptions,
 }
 
 var maxVersion = int64(len(migrations))
@@ -292,5 +293,14 @@ func m08_normalize_datetime(tx *sql.Tx) error {
 		}
 	}
 	_, err = tx.Exec(`update items set date = strftime('%Y-%m-%d %H:%M:%f', date);`)
+	return err
+}
+
+func m08a_add_descriptions(tx *sql.Tx) error {
+	sql := `
+		update items set description=''
+		where description is null
+	`
+	_, err := tx.Exec(sql)
 	return err
 }

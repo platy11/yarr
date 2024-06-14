@@ -364,6 +364,11 @@ select.form-control:not([multiple]):not([size]) {
   display: block !important;
 }
 
+.item-description {
+  font-size: .85rem;
+  margin-top: 2px;
+}
+
 /* content */
 
 .content {

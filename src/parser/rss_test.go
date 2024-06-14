@@ -34,16 +34,18 @@ func TestRSSFeed(t *testing.T) {
 		SiteURL: "http://www.scripting.com/",
 		Items: []Item{
 			{
-				GUID:    "http://www.scripting.com/one/",
-				URL:     "http://www.scripting.com/one/",
-				Title:   "Title 1",
-				Content: "Description 1",
+				GUID:        "http://www.scripting.com/one/",
+				URL:         "http://www.scripting.com/one/",
+				Title:       "Title 1",
+				Description: "Description 1",
+				Content:     "Description 1",
 			},
 			{
-				GUID:    "http://www.scripting.com/two/",
-				URL:     "http://www.scripting.com/two/",
-				Title:   "Title 2",
-				Content: "Description 2",
+				GUID:        "http://www.scripting.com/two/",
+				URL:         "http://www.scripting.com/two/",
+				Title:       "Title 2",
+				Description: "Description 2",
+				Content:     "Description 2",
 			},
 		},
 	}

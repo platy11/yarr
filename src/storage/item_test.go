@@ -45,7 +45,7 @@ func testItemsSetup(db *Storage) testItemScope {
 	now := time.Now()
 	db.CreateItems([]Item{
 		// feed11
-		{GUID: "item111", FeedId: feed11.Id, Title: "title111", Date: now.Add(time.Hour * 24 * 1)},
+		{GUID: "item111", FeedId: feed11.Id, Title: "title111", Description: "description111", Date: now.Add(time.Hour * 24 * 1)},
 		{GUID: "item112", FeedId: feed11.Id, Title: "title112", Date: now.Add(time.Hour * 24 * 2)}, // read
 		{GUID: "item113", FeedId: feed11.Id, Title: "title113", Date: now.Add(time.Hour * 24 * 3)}, // starred
 		// feed12
@@ -76,13 +76,13 @@ func getItem(db *Storage, guid string) *Item {
 	i := &Item{}
 	err := db.db.QueryRow(`
 		select
-			i.id, i.guid, i.feed_id, i.title, i.link, i.content,
-			i.date, i.status, i.image, i.podcast_url
+			i.id, i.guid, i.feed_id, i.title, i.link, i.description,
+			i.content, i.date, i.status, i.image, i.podcast_url
 		from items i
 		where i.guid = ?
 	`, guid).Scan(
-		&i.Id, &i.GUID, &i.FeedId, &i.Title, &i.Link, &i.Content,
-		&i.Date, &i.Status, &i.ImageURL, &i.AudioURL,
+		&i.Id, &i.GUID, &i.FeedId, &i.Title, &i.Link, &i.Description,
+		&i.Content, &i.Date, &i.Status, &i.ImageURL, &i.AudioURL,
 	)
 	if err != nil {
 		log.Fatal(err)
