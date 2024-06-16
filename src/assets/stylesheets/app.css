@@ -8,6 +8,7 @@ html {
 
 body {
   overscroll-behavior: none;
+  color-scheme: light;
 }
 
 /* fonts */
@@ -512,6 +513,7 @@ a,
 .theme-night .toolbar-search {
   color: #d1d1d1;
   background-color: #0e0e0e;
+  color-scheme: dark;
 }
 .theme-night .content hr,
 .theme-night .content pre,
