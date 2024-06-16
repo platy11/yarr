@@ -7,6 +7,7 @@ html {
 }
 
 body {
+  overflow: hidden; /* TODO: fix in a better way */
   overscroll-behavior: none;
   color-scheme: light;
 }
@@ -366,8 +367,11 @@ select.form-control:not([multiple]):not([size]) {
 }
 
 .item-description {
-  font-size: .85rem;
   margin-top: 2px;
+  font-size: .85rem;
+  max-height: 3.8rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 /* content */
@@ -469,8 +473,8 @@ a,
 .dropdown-item.active,
 .dropdown-item:active,
 .selectgroup input:checked + .selectgroup-label {
-  color: #fff;
-  background-color: #0080d4 !important;
+  /* color: #fff; */
+  background-color: #0080d480 !important;
 }
 
 .btn-default:focus,
