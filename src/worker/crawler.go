@@ -37,6 +37,9 @@ func DiscoverFeed(candidateUrl string) (*DiscoverResult, error) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
+		if res.Header.Get("cf-mitigated") == "challenge" {
+			return nil, fmt.Errorf("status code %d (cloudflare challenge)", res.StatusCode)
+		}
 		return nil, fmt.Errorf("status code %d", res.StatusCode)
 	}
 	cs := getCharset(res)
@@ -185,6 +188,9 @@ func listItems(f storage.Feed, db *storage.Storage) ([]storage.Item, error) {
 	case res.StatusCode < 200 || res.StatusCode > 399:
 		if res.StatusCode == 404 {
 			return nil, fmt.Errorf("feed not found")
+		}
+		if res.Header.Get("cf-mitigated") == "challenge" {
+			return nil, fmt.Errorf("status code %d (cloudflare challenge)", res.StatusCode)
 		}
 		return nil, fmt.Errorf("status code %d", res.StatusCode)
 	case res.StatusCode == http.StatusNotModified:
