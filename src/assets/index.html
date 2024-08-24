@@ -144,7 +144,7 @@
                                 <span class="counter text-right">{{ filteredFeedStats[feed.id] || '' }}</span>
                                 <span class="icon flex-shrink-0 mx-2"
                                       :title="feed_errors[feed.id]"
-                                      v-if="!filterSelected && feed_errors[feed.id]">
+                                      v-if="feed_errors[feed.id]">
                                     {% inline "alert-circle.svg" %}
                                 </span>
                             </div>

@@ -119,6 +119,7 @@ func ParseAndFix(r io.Reader, baseURL, fallbackEncoding string) (*Feed, error) {
 	}
 	feed.TranslateURLs(baseURL)
 	feed.SetMissingDatesTo(time.Now())
+	feed.ApplyUserFilters()
 	return feed, nil
 }
 
@@ -167,5 +168,29 @@ func (feed *Feed) TranslateURLs(base string) error {
 		}
 		item.URL = siteUrl.ResolveReference(itemUrl).String()
 	}
+	return nil
+}
+
+func (feed *Feed) ApplyUserFilters() error {
+	var filter func(Item) bool
+	if strings.Contains(feed.Title, "Nature news") {
+		filter = func(i Item) bool {
+			return !strings.Contains(i.URL, "nature.com/articles/s")
+		}
+	} else if strings.Contains(feed.Title, "Nature papers") {
+		filter = func(i Item) bool {
+			return strings.Contains(i.URL, "nature.com/articles/s")
+		}
+	} else {
+		return nil
+	}
+
+	out := make([]Item, 0)
+	for _, item := range feed.Items {
+		if filter(item) {
+			out = append(out, item)
+		}
+	}
+	feed.Items = out
 	return nil
 }

@@ -68,9 +68,9 @@ func TestParse(t *testing.T) {
 		Title: "Title",
 		Items: []Item{
 			{
-				Title:   "Item 1",
+				Title:       "Item 1",
 				Description: "content",
-				Content: "<div>content</div>",
+				Content:     "<div>content</div>",
 			},
 		},
 	}
@@ -149,5 +149,27 @@ func TestParseCleanIllegalCharsInNonUTF8(t *testing.T) {
 	}
 	if len(feed.Items) != 1 || feed.Items[0].Title != "привет" {
 		t.Fatalf("invalid feed, got: %v", feed)
+	}
+}
+
+func TestApplyUserFilters(t *testing.T) {
+	feed := Feed{
+		Title:   "Nature news",
+		SiteURL: "http://feeds.nature.com/nature/rss/current",
+		Items: []Item{
+			{
+				URL: "nature.com/articles/s",
+			},
+			{
+				URL: "nature.com/articles/d",
+			},
+		},
+	}
+	err := feed.ApplyUserFilters()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(feed.Items) != 1 || feed.Items[0].URL != "nature.com/articles/d" {
+		t.Fatalf("incorrect feed filtering")
 	}
 }
